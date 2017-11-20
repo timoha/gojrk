@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Move it</title>
+</head>
+<body>
+  <section class="columns">
+	  <a class="column" id="left">l</a>
+	  <a class="column" id="center">c</a>
+	  <a class="column" id="right">r</a>
+  </section>
+  <style>
+	html, body, section {
+	  height: 100%;
+	}
+	body {
+		text-align: center;
+	}
+	.columns {
+		display: flex;
+	}
+	.column {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		justify-content: center;
+		margin: 5px;
+		font-size: 6.25rem;
+		font-family: sans-serif;
+		color: white;
+		cursor: pointer;
+		text-transform: uppercase;
+	}
+	.columns a {
+		background-color: #f09528;
+	}
+	.columns a:hover {
+		background-color: #ff9e2c;
+	}
+	
+  </style>
+  <script>
+	function setTarget(v) {
+		return function() {
+			fetch('./jrk?target=' + v).then(function(response) {
+				return response.blob();
+			}).then(function(text) {
+				console.log(text);
+			}).catch(function(error) {
+				console.log('error fetching: ' + error.message);
+			});
+		}
+	}
+
+	var leftBtn = document.querySelector('#left');
+	leftBtn.addEventListener('click', setTarget(4000));
+
+	var centerBtn = document.querySelector('#center');
+	centerBtn.addEventListener('click', setTarget(1000));
+
+	var rightBtn = document.querySelector('#right');
+	rightBtn.addEventListener('click', setTarget(0));
+  </script>
+</body>
+</html>
