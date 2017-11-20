@@ -8,6 +8,7 @@ import (
 )
 
 var target = flag.Int("target", -1, "target to set the motor at (0-4095)")
+var device = flag.String("device", "", "filepath to device")
 
 func main() {
 	flag.Parse()
@@ -16,7 +17,7 @@ func main() {
 		log.Fatalln("target has to be in range 0 to 4095")
 	}
 
-	j, err := gojrk.NewJRK("/dev/cu.usbmodem00191501")
+	j, err := gojrk.NewJRK(*device)
 	if err != nil {
 		log.Fatalln("failed to connect to jrk controller:", err)
 	}
