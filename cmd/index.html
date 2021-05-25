@@ -43,7 +43,17 @@
   <script>
 	function setTarget(v) {
 		return function() {
-			fetch('./jrk?target=' + v).then(function(response) {
+			fetch('./actions/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					handler: {
+						name: v,
+					},
+				})
+			}).then(function(response) {
 				return response.blob();
 			}).then(function(text) {
 				console.log(text);
@@ -54,13 +64,13 @@
 	}
 
 	var leftBtn = document.querySelector('#left');
-	leftBtn.addEventListener('click', setTarget(4000));
+	leftBtn.addEventListener('click', setTarget('handler_left'));
 
 	var centerBtn = document.querySelector('#center');
-	centerBtn.addEventListener('click', setTarget(1000));
+	centerBtn.addEventListener('click', setTarget('handler_center'));
 
 	var rightBtn = document.querySelector('#right');
-	rightBtn.addEventListener('click', setTarget(0));
+	rightBtn.addEventListener('click', setTarget('handler_right'));
   </script>
 </body>
 </html>

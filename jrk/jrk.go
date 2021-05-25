@@ -1,4 +1,4 @@
-package gojrk
+package jrk
 
 import (
 	"io"
@@ -6,6 +6,7 @@ import (
 	"syscall"
 
 	"github.com/pkg/term/termios"
+	"golang.org/x/sys/unix"
 )
 
 // JRK is used communicate with jrk USB motor controller
@@ -43,20 +44,20 @@ func (jrk *JRK) SetTarget(v int) error {
 	return err
 }
 
-// NewJRK connects to jrk USB motor contoller.
-func NewJRK(path string) (*JRK, error) {
+// New connects to jrk USB motor contoller.
+func New(path string) (*JRK, error) {
 	f, err := os.OpenFile(path, os.O_RDWR|syscall.O_NOCTTY, 0)
 	if err != nil {
 		return nil, err
 	}
 
-	var o syscall.Termios
+	var o unix.Termios
 	if err := termios.Tcgetattr(f.Fd(), &o); err != nil {
 		return nil, err
 	}
 
-	o.Lflag &^= syscall.ECHO | syscall.ECHONL | syscall.ICANON | syscall.ISIG | syscall.IEXTEN
-	o.Oflag &^= syscall.ONLCR | syscall.OCRNL
+	o.Lflag &^= unix.ECHO | unix.ECHONL | unix.ICANON | unix.ISIG | unix.IEXTEN
+	o.Oflag &^= unix.ONLCR | unix.OCRNL
 
 	if err := termios.Tcsetattr(f.Fd(), termios.TCSANOW, &o); err != nil {
 		return nil, err
